@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="js/ocanvas-2.5.1.js"></script>
+	<style type="text/css">
+
+	</style>
+
+</head>
+<body>
+<canvas id="canvas" height="800" width="1280"></canvas>
+<script type="text/javascript">
+	
+	oCanvas.domReady(function () {
+
+		var canvas = oCanvas.create({
+			canvas: "#canvas",
+			background: "#0cc"
+		});
+
+		var box = canvas.display.rectangle({
+			origin: { x: "center", y: "center" },
+			width: 50,
+			height: 50,
+			fill: '#F00'
+		})
+
+		var allBoxes = [];
+		var numBoxes = 80;
+
+		function createBoxes()
+		{
+			var cols = 10,
+			dummyWidth = 0,
+			yPos = 0
+			for (var i = 0; i < numBoxes; i++) {
+				var boxes = allBoxes['box_'+i] = box.clone({
+					x: dummyWidth + 25,
+					y: yPos + 25,
+					name: 'box_'+i
+				})
+				dummyWidth += (boxes.width + 1)
+				if((i+1)%cols===0)
+				{
+					dummyWidth = 0;
+					yPos += (boxes.height + 1)
+				}
+
+				boxes.bind('click', clickHandler)
+
+				canvas.addChild(boxes);
+			};
+		}
+
+		function clickHandler(e)
+		{
+			this.animate({
+				width: 0
+			}, {
+				duration: 200,
+				easing: "ease-in-out-cubic",
+				callback: function () {
+					this.fill = '#FFF';
+					this.redraw();
+					this.animate({
+						width: 50
+					}, {
+						duration:200,
+						easing: "ease-in-out-cubic",
+					});
+				}
+			});
+		}
+
+		createBoxes();
+
+	});
+
+
+
+</script>
+</body>
+</html>
